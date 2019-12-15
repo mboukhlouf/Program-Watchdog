@@ -28,7 +28,7 @@ namespace Program_Watchdog
             {
                 String[] tokens = TextBoxProgram.Text
                     .Trim()
-                    .Split(' ');
+                    .Split(new[] {' '}, 2);
 
                 if (tokens.Length > 0)
                 {
@@ -122,7 +122,8 @@ namespace Program_Watchdog
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    UseShellExecute = false
+                    UseShellExecute = false,
+                    WorkingDirectory = Environment.CurrentDirectory
                 },
                 EnableRaisingEvents = true
             };
