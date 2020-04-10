@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Program_Watchdog"
         xmlns:controls="clr-namespace:Program_Watchdog.Controls"
         mc:Ignorable="d"
-        Title="Program Watchdog" Height="450" Width="800">
+        Title="Program Watchdog" Height="450" Width="800" Closing="Window_Closing" Loaded="Window_Loaded">
     <Border Padding="25">
         <Grid>
             <Grid.RowDefinitions>

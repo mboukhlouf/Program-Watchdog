@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +13,7 @@ namespace Program_Watchdog
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly string SettingsFileName = "settings.json";
         private Process process;
         private CancellationTokenSource restartCancellationTokenSource;
 
@@ -28,7 +30,7 @@ namespace Program_Watchdog
             {
                 String[] tokens = TextBoxProgram.Text
                     .Trim()
-                    .Split(new[] {' '}, 2);
+                    .Split(new[] { ' ' }, 2);
 
                 if (tokens.Length > 0)
                 {
@@ -46,7 +48,7 @@ namespace Program_Watchdog
                     {
                         args = tokens[1];
                     }
-                    
+
                     StartProcess(programName, args);
 
                     TextBoxProgram.IsReadOnly = true;
@@ -157,6 +159,38 @@ namespace Program_Watchdog
                     RestartProcess(restartTime);
                 }
             });
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(SettingsFileName))
+            {
+                try
+                {
+                    Settings settings = Settings.ParseFromFile(SettingsFileName);
+                    TextBoxProgram.Text = settings.Program;
+                    TextBoxRestartValue.Text = settings.RestartTime;
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private void Window_Closing(object sender, EventArgs e)
+        {
+            try
+            {
+                Settings settings = new Settings
+                {
+                    Program = TextBoxProgram.Text,
+                    RestartTime = TextBoxRestartValue.Text
+                };
+                settings.SaveToFile(SettingsFileName);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
